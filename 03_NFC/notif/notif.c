@@ -1,19 +1,17 @@
-#include "notif.h"
 
+#include "../notif/notif.h"
+
+#include <assert.h>
+#include <memory.h>
 #include <stdlib.h>
-#include <string.h>
 
 notif_chain_t *nfc_create_new_notif_chain(char *notif_chain_name)
 {
-	notif_chain_t *nfc = (notif_chain_t *)calloc(1, sizeof(notif_chain_t));
-	if(nfc == NULL) {
-		printf("Memory Allocation Failed\n");
-		exit(EXIT_FAILURE);
+	notif_chain_t *nfc = calloc(1, sizeof(notif_chain_t));
+	if(notif_chain_name) {
+		strncpy(nfc->nfc_name, notif_chain_name, sizeof(nfc->nfc_name));
 	}
-
-	strncpy(nfc->nfc_name, notif_chain_name, MAX_NFC_NAME);
 	init_glthread(&nfc->notif_chain_head);
-
 	return nfc;
 }
 
@@ -49,7 +47,7 @@ void nfc_invoke_notif_chain(notif_chain_t *nfc, void *arg, size_t arg_size,
 		return;
 	}
 
-	assert(key_size <= MAX_KEY_SIZE);
+	assert(key_size <= MAX_NOTIF_KEY_SIZE);
 
 	ITERATE_GLTHREAD_BEGIN(&nfc->notif_chain_head, curr)
 	{
