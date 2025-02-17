@@ -1,2 +1,4 @@
 .vscode
 format.sh
+a.out
+*.swp
