@@ -21,6 +21,12 @@ void thread1_create()
 {
 	/* opaque object, dont bother about its internal
 	 * members */
+	
+	/*
+	pthread_t is typically an opaque data type. 
+	This means its exact structure is not defined in the pthreads standard and can vary depending on the underlying operating system implementation. 
+	You should treat it as an abstract handle or identifier for a thread.   
+	*/
 	pthread_t pthread1;
 
 	/* Take some argument to be passed to the thread fn,
