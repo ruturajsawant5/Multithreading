@@ -43,6 +43,7 @@ rt_entry_t *rt_add_or_update_rt_entry(rt_table_t *rt_table, char *dest,
 	}
 
 	if(gw_ip || oif) {
+		printf("Sending Notification\n");
 		/* Entry is being updated by the publisher, send
 		 * notification to all subscribers*/
 		nfc_invoke_notif_chain(rt_entry->nfc, (char *)rt_entry,

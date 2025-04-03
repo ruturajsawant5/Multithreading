@@ -37,7 +37,7 @@ static void *subscriber_thread_fn(void *arg)
 	rt_entry_keys.mask = 32;
 	rt_table_register_for_notification(
 	    publisher_get_rt_table(), &rt_entry_keys, sizeof(rt_entry_keys_t),
-	    test_cb, (uint32_t)arg);
+	    test_cb, *(uint32_t*)arg);
 
 	/* register for Notif 122.1.1.2/32 */
 	memset(&rt_entry_keys, 0, sizeof(rt_entry_keys_t));
@@ -45,7 +45,7 @@ static void *subscriber_thread_fn(void *arg)
 	rt_entry_keys.mask = 32;
 	rt_table_register_for_notification(
 	    publisher_get_rt_table(), &rt_entry_keys, sizeof(rt_entry_keys_t),
-	    test_cb, (uint32_t)arg);
+	    test_cb, *(uint32_t*)arg);
 
 	/* register for Notif 122.1.1.3/32 */
 	memset(&rt_entry_keys, 0, sizeof(rt_entry_keys_t));
@@ -53,7 +53,7 @@ static void *subscriber_thread_fn(void *arg)
 	rt_entry_keys.mask = 32;
 	rt_table_register_for_notification(
 	    publisher_get_rt_table(), &rt_entry_keys, sizeof(rt_entry_keys_t),
-	    test_cb, (uint32_t)arg);
+	    test_cb, *(uint32_t*)arg);
 
 	pause();
 	return NULL;
@@ -61,6 +61,9 @@ static void *subscriber_thread_fn(void *arg)
 
 void create_subscriber_thread(uint32_t client_id)
 {
+	uint32_t* data = (uint32_t*)malloc(sizeof(uint32_t));
+	*data = client_id;
+
 	pthread_attr_t attr;
 	pthread_t subs_thread;
 
@@ -68,6 +71,6 @@ void create_subscriber_thread(uint32_t client_id)
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 	pthread_create(&subs_thread, &attr, subscriber_thread_fn,
-		       (void *)client_id);
+		       (void *)data);
 	printf("Subscriber %u created\n", client_id);
 }

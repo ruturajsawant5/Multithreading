@@ -30,17 +30,28 @@ void main_menu()
 				printf("Enter Destination :");
 				scanf("%s", dest);
 				printf("Mask : ");
-				scanf("%d", &mask);
+				scanf("%hhd", &mask);
 				printf("Enter oif name :");
 				scanf("%s", oif);
 				printf("Enter Gateway IP :");
 				scanf("%s", gw);
+                                printf("\n---------------------------\n");
 				rt_add_or_update_rt_entry(
 				    publisher_get_rt_table(), dest, mask, gw,
 				    oif);
+				printf("\n---------------------------\n");
 			} break;
 			case 2:
-				/*  Implement your self */
+				bool deleted = false;
+				char dest[16];
+                                char mask;
+				printf("Enter Destination :");
+                                scanf("%s", dest);
+                                printf("Mask : ");
+                                scanf("%hhd", &mask);
+				printf("\n---------------------------\n");
+				rt_delete_rt_entry(publisher_get_rt_table(), dest, mask);
+				printf("\n---------------------------\n");
 				break;
 			case 3:
 				rt_dump_rt_table(publisher_get_rt_table());
@@ -53,16 +64,19 @@ void main_menu()
 void *publisher_thread_fn(void *arg)
 {
 	/* Add some default entries in rt table */
+	 printf("\n---------------------------\n");
 	rt_add_or_update_rt_entry(publisher_get_rt_table(), "122.1.1.1", 32,
 				  "10.1.1.1", "eth1");
-
+	 printf("\n---------------------------\n");
 	rt_add_or_update_rt_entry(publisher_get_rt_table(), "122.1.1.2", 32,
 				  "10.1.1.2", "eth1");
-
+	 printf("\n---------------------------\n");
 	rt_add_or_update_rt_entry(publisher_get_rt_table(), "122.1.1.3", 32,
 				  "10.1.1.3", "eth1");
-
+	printf("\n---------------------------\n");
+        printf("\n---------DUMP TABLE------------------\n");
 	rt_dump_rt_table(publisher_get_rt_table());
+	printf("\n-------------------------------------\n");
 	main_menu();
 }
 
@@ -90,8 +104,8 @@ int main(int argc, char **argv)
 	create_subscriber_thread(3);
 	sleep(1);
 	/* Create publisher thread*/
+	printf("-----------------------------------------");
 	create_publisher_thread();
-	printf("Publisher thread created\n");
 	pthread_exit(0);
 	return 0;
 }
